@@ -2,25 +2,14 @@ const   express    = require('express'),
         app        = express(),
         bodyParser = require('body-parser'), // to be able to get input from the body of the request (req.body)
         mongoose   = require('mongoose'), // to be able to add data to MongoDB database from our JS file
-        Restaurant = require('./models/restaurant'); // add link to our restaurant file with restaurant schema and model
+        Restaurant = require('./models/restaurant'), // add link to our restaurant file with restaurant schema and model
+        seedDB     = require('./seeds'); // require seeds.js file to update the DB
 
 mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true}); // connects mongoose to MongoDB
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
 
-/*Restaurant.create(
-    {
-        name: 'I like wine',
-        image: 'https://source.unsplash.com/lZrLPITHbxU/800x600',
-        description: 'Крутой ресторан со вкусным вином'
-    }, function(err, rest){
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('NEWLY CREATED RESTAURANT:');
-            console.log(rest);
-        }
-});*/
+seedDB(); // seeding the DB
 
 app.get('/', function(req, res){
     res.render('landing');
@@ -64,7 +53,7 @@ app.get('/restaurants/new', function(req, res){
 // SHOW ROUTE - shows more info about one restaurant
 app.get('/restaurants/:id', function(req, res){
     // find the restaurand with provided ID using mongoose .findById() method
-    Restaurant.findById(req.params.id, function(err, foundRestaurant){
+    Restaurant.findById(req.params.id).populate('comments').exec(function(err, foundRestaurant){
         if (err){
             console.log(err);
         } else {
