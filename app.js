@@ -1,21 +1,12 @@
 const   express    = require('express'),
         app        = express(),
         bodyParser = require('body-parser'), // to be able to get input from the body of the request (req.body)
-        mongoose   = require('mongoose'); // to be able to add data to MongoDB database from our JS file
+        mongoose   = require('mongoose'), // to be able to add data to MongoDB database from our JS file
+        Restaurant = require('./models/restaurant'); // add link to our restaurant file with restaurant schema and model
 
 mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true}); // connects mongoose to MongoDB
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
-
-// MONGOOSE SCHEMA SETUP
-// creating schema:
-const restSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-// creating restaurant model based on our schema allowing us to use methods:
-const Restaurant = mongoose.model('Restaurant', restSchema);
 
 /*Restaurant.create(
     {
