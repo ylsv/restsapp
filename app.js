@@ -3,6 +3,7 @@ const   express    = require('express'),
         bodyParser = require('body-parser'), // to be able to get input from the body of the request (req.body)
         mongoose   = require('mongoose'), // to be able to add data to MongoDB database from our JS file
         Restaurant = require('./models/restaurant'), // add link to our restaurant file with restaurant schema and model
+        Comment    = require('./models/comment'), // add link to comment model
         seedDB     = require('./seeds'); // require seeds.js file to update the DB
 
 mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true}); // connects mongoose to MongoDB
@@ -15,6 +16,10 @@ app.get('/', function(req, res){
     res.render('landing');
 });
 
+// ===========================
+// RESTAURANT ROUTES
+// ===========================
+
 // INDEX ROUTE - show all restaurants
 app.get('/restaurants', function(req, res){
     // Get all restaurants from DB and render them
@@ -22,7 +27,7 @@ app.get('/restaurants', function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render('index', {restaurants: allRests});
+            res.render('restaurants/index', {restaurants: allRests});
         }
     });
 });
@@ -47,7 +52,7 @@ app.post('/restaurants', function(req, res){
 
 // NEW ROUTE - show form to create new restaurant
 app.get('/restaurants/new', function(req, res){
-    res.render('new');
+    res.render('restaurants/new');
 });
 
 // SHOW ROUTE - shows more info about one restaurant
@@ -58,10 +63,48 @@ app.get('/restaurants/:id', function(req, res){
             console.log(err);
         } else {
             // render show template with that found restaurant
-            res.render('show', {restaurant: foundRestaurant});
+            res.render('restaurants/show', {restaurant: foundRestaurant});
         }
     });
 });
+
+// ===========================
+// COMMENTS ROUTES
+// ===========================
+
+app.get('/restaurants/:id/comments/new', function(req,res){
+    Restaurant.findById(req.params.id, function(err, restaurant){
+        if(err){
+            console.log(err);
+        } else {
+            res.render('comments/new', {restaurant: restaurant});
+        }
+    });
+});
+
+app.post('/restaurants/:id/comments', function(req, res){
+    // lookup restaurant using ID
+    Restaurant.findById(req.params.id, function(err, restaurant){
+        if(err){
+            console.log(err);
+            res.redirect('/restaurants');
+        } else {
+            // create new comment
+            Comment.create(req.body.comment, function(err, comment){
+                if(err){
+                    console.log(err);
+                } else {
+                    // connect new comment to restaurant
+                    restaurant.comments.push(comment);
+                    restaurant.save();
+                    // redirect to restaurant show page
+                    res.redirect(`/restaurants/${restaurant._id}`);
+                }
+            });
+        }
+    });
+});
+
 
 
 app.listen(3000, () => console.log('Rests App Has Started!'));

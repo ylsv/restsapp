@@ -1,4 +1,4 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
 <h1><%= restaurant.name %></h1>
 
@@ -6,8 +6,12 @@
 
 <p><%= restaurant.description %></p>
 
+<p>
+    <a class="btn btn-success" href="/restaurants/<%= restaurant.id %>/comments/new">Добавить новый комментарий</a>
+</p>
+
 <% restaurant.comments.forEach(function(comment){ %>
     <p><strong><%= comment.author %></strong> - <%= comment.text %></p>
 <% }); %>
 
-<% include partials/footer %>
+<% include ../partials/footer %>
