@@ -141,6 +141,18 @@ app.post('/register', function(req, res){
         });
     });
 });
+// show login form
+app.get('/login', function(req, res){
+    res.render('login');
+});
+// handle login logic
+app.post('/login', passport.authenticate('local',
+    {
+        successRedirect: '/restaurants',
+        failureRedirect: '/login',
+    }), function(req, res){ // this callback function doesn't do anything and is here just to demonstrante that 'pasport.authenticate...' is a middleware
+});
+
 
 
 app.listen(3000, () => console.log('Rests App Has Started!'));
