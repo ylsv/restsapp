@@ -2,9 +2,24 @@ const   express    = require('express'),
         app        = express(),
         bodyParser = require('body-parser'), // to be able to get input from the body of the request (req.body)
         mongoose   = require('mongoose'), // to be able to add data to MongoDB database from our JS file
+        passport   = require('passport'), // add passport js for authentication
+        LocalStrategy = require('passport-local'), // authentication by means of email and password
         Restaurant = require('./models/restaurant'), // add link to our restaurant file with restaurant schema and model
         Comment    = require('./models/comment'), // add link to comment model
+        User       = require('./models/user'), // add user model
         seedDB     = require('./seeds'); // require seeds.js file to update the DB
+
+// PASSPORT CONFIGURATION
+app.use(require('express-session')({
+    secret: 'The quick brown fox jumps over the lazy dog',
+    resave: false,
+    saveUninitialized: false,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true}); // connects mongoose to MongoDB
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
@@ -105,12 +120,27 @@ app.post('/restaurants/:id/comments', function(req, res){
     });
 });
 
+// ===========================
+// AUTH ROUTES
+// ===========================
+
+// show register form
+app.get('/register', function(req, res){
+    res.render('register');
+});
+// handle sign up logic
+app.post('/register', function(req, res){
+    const newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){ // method that creates a new user with its password from the form data
+        if(err){
+            console.log(err);
+            return res.render('register');
+        }
+        passport.authenticate('local')(req, res, function(){
+            res.redirect('/restaurants');
+        });
+    });
+});
 
 
 app.listen(3000, () => console.log('Rests App Has Started!'));
-
-
-/* for rests creation (to be deleted later):
-https://source.unsplash.com/S9yn7XYqxoU/800x600
-https://source.unsplash.com/lZrLPITHbxU/800x600
-https://source.unsplash.com/Orz90t6o0e4/800x600 */
