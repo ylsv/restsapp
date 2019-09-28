@@ -21,6 +21,11 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(function(req, res, next){ // middleware to add currentUser variable to routes to display navbar differently depending on the user being logged in or not
+    res.locals.currentUser = req.user;
+    next();
+});
+
 mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true}); // connects mongoose to MongoDB
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
@@ -87,7 +92,7 @@ app.get('/restaurants/:id', function(req, res){
 // COMMENTS ROUTES
 // ===========================
 
-app.get('/restaurants/:id/comments/new', function(req,res){
+app.get('/restaurants/:id/comments/new', isLoggedIn, function(req,res){
     Restaurant.findById(req.params.id, function(err, restaurant){
         if(err){
             console.log(err);
@@ -97,7 +102,7 @@ app.get('/restaurants/:id/comments/new', function(req,res){
     });
 });
 
-app.post('/restaurants/:id/comments', function(req, res){
+app.post('/restaurants/:id/comments', isLoggedIn, function(req, res){
     // lookup restaurant using ID
     Restaurant.findById(req.params.id, function(err, restaurant){
         if(err){
@@ -153,6 +158,18 @@ app.post('/login', passport.authenticate('local',
     }), function(req, res){ // this callback function doesn't do anything and is here just to demonstrante that 'pasport.authenticate...' is a middleware
 });
 
+// add logout route
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/restaurants');
+});
+
+function isLoggedIn(req, res, next){ // middleware we create to check if the user is logged in (to be added to the routes);
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/login');
+}
 
 
 app.listen(3000, () => console.log('Rests App Has Started!'));

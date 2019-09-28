@@ -1,7 +1,11 @@
-<h1>Login</h1>
+<% include ./partials/header %>
+
+<h1>Вход</h1>
 
 <form action="/login" method="POST">
     <input type="text" name="username" placeholder="Имя пользователя">
     <input type="password" name="password" placeholder="Пароль">
-    <input type="submit" value="Войти">
+    <input type="submit" value="Вход">
 </form>
+
+<% include ./partials/footer %>

@@ -16,9 +16,13 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class='nav navbar-nav navbar-right'>
-                        <li><a href="/">Вход</a></li>
-                        <li><a href="/">Регистрация</a></li>
-                        <li><a href="/">Выход</a></li>
+                        <% if(!currentUser){ %>
+                            <li><a href="/login">Вход</a></li>
+                            <li><a href="/register">Регистрация</a></li>
+                        <% } else { %>
+                            <li><a href="#">Вы вошли в систему как <%= currentUser.username %></a></li>
+                            <li><a href="/logout">Выход</a></li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
