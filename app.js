@@ -18,7 +18,7 @@ mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true})
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
 app.use(express.static(__dirname + '/public')); // tells the app to search for linked files (css/js) in the public directory. __dirname - is the name of root directory (add it for safety purposes).
-seedDB(); // seeding the DB of sample restaurants and comments
+// seedDB(); // seeding the DB of sample restaurants and comments
 
 // PASSPORT CONFIGURATION
 app.use(require('express-session')({

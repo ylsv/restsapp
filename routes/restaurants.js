@@ -19,12 +19,16 @@ router.get('/', function(req, res){
 });
 
 // CREATE ROUTE - add new restaurant to DB
-router.post('/', function(req, res){
+router.post('/', isLoggedIn, function(req, res){
     //get data from form and add to campgrounds array
     const name = req.body.name;
     const image = req.body.image;
     const desc = req.body.description;
-    const newRestaurant = {name: name, image: image, description: desc};
+    const author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+    const newRestaurant = {name: name, image: image, description: desc, author: author};
     // Create a new rest and save it to DB
     Restaurant.create(newRestaurant, function(err, newlyCreated){
         if(err){
@@ -37,7 +41,7 @@ router.post('/', function(req, res){
 });
 
 // NEW ROUTE - show form to create new restaurant
-router.get('/new', function(req, res){
+router.get('/new', isLoggedIn, function(req, res){
     res.render('restaurants/new');
 });
 
@@ -54,6 +58,12 @@ router.get('/:id', function(req, res){
     });
 });
 
+function isLoggedIn(req, res, next){ // middleware we create to check if the user is logged in (to be added to the routes);
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/login');
+}
 
 
 module.exports = router;

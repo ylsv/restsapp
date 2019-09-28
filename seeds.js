@@ -73,7 +73,7 @@ async function seedDB(){
         await Comment.deleteMany({});
         console.log('comments were removed');
     
-        for(const seed of seeds){
+        /*for(const seed of seeds){
             let restaurant = await Restaurant.create(seed);
             console.log('restaurant was created');
             let comment = await Comment.create(
@@ -86,7 +86,7 @@ async function seedDB(){
             restaurant.comments.push(comment);
             restaurant.save();
             console.log('comment added to restaurant');
-        }
+        }*/
     } catch(err){
         console.log(err);
     }    

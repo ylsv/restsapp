@@ -6,10 +6,7 @@
         <div style="width: 30%; margin: 25px auto">
             <form action="/restaurants/<%= restaurant._id %>/comments" method="POST">
                 <div class="form-group">
-                    <input class='form-control' type="text" name="comment[text]" placeholder="текст комментария">
-                </div>
-                <div class="form-group">
-                    <input class='form-control' type="text" name="comment[author]" placeholder="автор">
+                    <input class='form-control' type="text" name="comment[text]" placeholder="ваш комментарий">
                 </div>
                 <div class="form-group">
                     <button class='btn btn-lg btn-primary btn-block'>Добавить!</button>
