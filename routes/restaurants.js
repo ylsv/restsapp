@@ -58,7 +58,31 @@ router.get('/:id', function(req, res){
     });
 });
 
-function isLoggedIn(req, res, next){ // middleware we create to check if the user is logged in (to be added to the routes);
+// EDIT ROUTE - shows form to edit a particular restaurant
+router.get('/:id/edit', function(req, res){
+    Restaurant.findById(req.params.id, function(err, foundRestaurant){
+        if(err){
+            res.redirect('/restaurants');
+        } else {
+            res.render('restaurants/edit', {restaurant: foundRestaurant});
+        }
+    }); 
+});
+
+// UPDATE ROUTE - finds and updates the restaurant and redirects to show page
+router.put('/:id', function(req, res){
+    Restaurant.findByIdAndUpdate(req.params.id, req.body.restaurant, function(err, updatedRestaurant){
+        if(err){
+            res.redirect('/');
+        } else {
+            res.redirect(`/restaurants/${req.params.id}`);
+        }
+    });
+});
+
+
+// middleware we create to check if the user is logged in (to be added to the routes);
+function isLoggedIn(req, res, next){ 
     if(req.isAuthenticated()){
         return next();
     }

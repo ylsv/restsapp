@@ -4,6 +4,7 @@ const   express    = require('express'),
         mongoose   = require('mongoose'), // to be able to add data to MongoDB database from our JS file
         passport   = require('passport'), // add passport js for authentication
         LocalStrategy = require('passport-local'), // authentication by means of email and password
+        methodOverride = require('method-override'), // used to override post methods into PUT etc
         Restaurant = require('./models/restaurant'), // add link to our restaurant file with restaurant schema and model
         Comment    = require('./models/comment'), // add link to comment model
         User       = require('./models/user'), // add user model
@@ -14,10 +15,11 @@ const   commentRoutes = require('./routes/comments'),
         restRoutes    = require('./routes/restaurants'),
         indexRoutes   = require('./routes/index');
 
-mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true}); // connects mongoose to MongoDB
+mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true, useFindAndModify: false}); // connects mongoose to MongoDB
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
 app.use(express.static(__dirname + '/public')); // tells the app to search for linked files (css/js) in the public directory. __dirname - is the name of root directory (add it for safety purposes).
+app.use(methodOverride('_method')); // tells the app to use methodOverride we required
 // seedDB(); // seeding the DB of sample restaurants and comments
 
 // PASSPORT CONFIGURATION
