@@ -80,6 +80,16 @@ router.put('/:id', function(req, res){
     });
 });
 
+// DESTROY ROUTE - deletes a restaurant and redirects to the show page
+router.delete('/:id', function(req, res){
+    Restaurant.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            res.redirect('/restaurants');
+        } else {
+            res.redirect('/restaurants');
+        }
+    });
+});
 
 // middleware we create to check if the user is logged in (to be added to the routes);
 function isLoggedIn(req, res, next){ 
