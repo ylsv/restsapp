@@ -18,10 +18,12 @@
                     <h4><a href="#"><%= restaurant.name %></a></h1>
                     <p><%= restaurant.description %></p>
                     <p><em>Ресторан добавлен пользователем "<%= restaurant.author.username %>"</em></p>
-                    <a class="btn btn-sm btn-warning" href="/restaurants/<%= restaurant._id %>/edit">Отредактировать</a>
-                    <form id="delete-form" action="/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-sm btn-danger">Удалить</button>
-                    </form>
+                     <% if (currentUser && restaurant.author.id.equals(currentUser._id)){ %> <!--shows button only if the correct user is logged in -->
+                        <a class="btn btn-sm btn-warning" href="/restaurants/<%= restaurant._id %>/edit">Редактировать</a>
+                        <form id="delete-form" action="/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-sm btn-danger">Удалить</button>
+                        </form>
+                    <% } %>
                 </div>
             </div>
             <div class="well">

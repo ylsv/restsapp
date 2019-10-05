@@ -59,18 +59,14 @@ router.get('/:id', function(req, res){
 });
 
 // EDIT ROUTE - shows form to edit a particular restaurant
-router.get('/:id/edit', function(req, res){
-    Restaurant.findById(req.params.id, function(err, foundRestaurant){
-        if(err){
-            res.redirect('/restaurants');
-        } else {
+router.get('/:id/edit', checkRestOwnership, function(req, res){
+        Restaurant.findById(req.params.id, function(err, foundRestaurant){
             res.render('restaurants/edit', {restaurant: foundRestaurant});
-        }
-    }); 
+    });
 });
 
 // UPDATE ROUTE - finds and updates the restaurant and redirects to show page
-router.put('/:id', function(req, res){
+router.put('/:id', checkRestOwnership, function(req, res){
     Restaurant.findByIdAndUpdate(req.params.id, req.body.restaurant, function(err, updatedRestaurant){
         if(err){
             res.redirect('/');
@@ -81,23 +77,43 @@ router.put('/:id', function(req, res){
 });
 
 // DESTROY ROUTE - deletes a restaurant and redirects to the show page
-router.delete('/:id', function(req, res){
+router.delete('/:id', checkRestOwnership, function(req, res){
     Restaurant.findByIdAndRemove(req.params.id, function(err){
         if(err){
             res.redirect('/restaurants');
         } else {
             res.redirect('/restaurants');
-        }
+        }   
     });
 });
 
-// middleware we create to check if the user is logged in (to be added to the routes);
+// middleware for authentication (logged in or not?)
 function isLoggedIn(req, res, next){ 
     if(req.isAuthenticated()){
         return next();
     }
     res.redirect('/login');
 }
+
+// middleware for authorization (permittion for the logged in user to do things)
+function checkRestOwnership(req, res, next) {
+    if(req.isAuthenticated()){
+        Restaurant.findById(req.params.id, function(err, foundRestaurant){
+            if(err){
+                res.redirect('back');
+            } else {
+                // does user own the restaurant?
+                if(foundRestaurant.author.id.equals(req.user._id)){
+                    next();
+                } else {
+                    res.redirect('back');
+                }
+            }
+        });
+    } else {
+        res.redirect('back');
+    }
+};
 
 
 module.exports = router;
