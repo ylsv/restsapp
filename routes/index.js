@@ -48,6 +48,7 @@ router.post('/login', passport.authenticate('local',
 // add logout route
 router.get('/logout', function(req, res){
     req.logout();
+    req.flash('success', 'Вы вышли из системы')
     res.redirect('/restaurants');
 });
 

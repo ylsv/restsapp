@@ -48,6 +48,8 @@ middlewareObj.isLoggedIn = function(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }
+    // flash message goes here
+    req.flash('error', 'Пожалуйста, войдите или зарегистрируйтесь');
     res.redirect('/login');
 }
 

@@ -2,6 +2,7 @@ const   express    = require('express'),
         app        = express(),
         bodyParser = require('body-parser'), // to be able to get input from the body of the request (req.body)
         mongoose   = require('mongoose'), // to be able to add data to MongoDB database from our JS file
+        flash      = require('connect-flash'), // to add flash messages
         passport   = require('passport'), // add passport js for authentication
         LocalStrategy = require('passport-local'), // authentication by means of email and password
         methodOverride = require('method-override'), // used to override post methods into PUT etc
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
 app.use(express.static(__dirname + '/public')); // tells the app to search for linked files (css/js) in the public directory. __dirname - is the name of root directory (add it for safety purposes).
 app.use(methodOverride('_method')); // tells the app to use methodOverride we required
+app.use(flash()); // tell express to use flash messages
 // seedDB(); // seeding the DB of sample restaurants and comments
 
 // PASSPORT CONFIGURATION
@@ -34,8 +36,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(function(req, res, next){ // middleware to add currentUser variable to routes to display templates differently depending on the logged in user
-    res.locals.currentUser = req.user;
+app.use(function(req, res, next){ 
+    // middleware to add currentUser variable to all routes to display templates differently depending on the logged in user
+    res.locals.currentUser = req.user; 
+    // middleware to add flash message variable to routes to display templates with flash messages
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 });
 
