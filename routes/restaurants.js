@@ -5,6 +5,7 @@
 const express = require('express');
 const router = express.Router(); // add router variable to add routes to it instead or app variable
 const Restaurant = require('../models/restaurant');
+const middleware = require('../middleware'); // automatically requires 'index.js' in this directory for middleware
 
 // INDEX ROUTE - show all restaurants
 router.get('/', function(req, res){
@@ -19,7 +20,7 @@ router.get('/', function(req, res){
 });
 
 // CREATE ROUTE - add new restaurant to DB
-router.post('/', isLoggedIn, function(req, res){
+router.post('/', middleware.isLoggedIn, function(req, res){
     //get data from form and add to campgrounds array
     const name = req.body.name;
     const image = req.body.image;
@@ -41,7 +42,7 @@ router.post('/', isLoggedIn, function(req, res){
 });
 
 // NEW ROUTE - show form to create new restaurant
-router.get('/new', isLoggedIn, function(req, res){
+router.get('/new', middleware.isLoggedIn, function(req, res){
     res.render('restaurants/new');
 });
 
@@ -59,14 +60,14 @@ router.get('/:id', function(req, res){
 });
 
 // EDIT ROUTE - shows form to edit a particular restaurant
-router.get('/:id/edit', checkRestOwnership, function(req, res){
+router.get('/:id/edit', middleware.checkRestOwnership, function(req, res){
         Restaurant.findById(req.params.id, function(err, foundRestaurant){
             res.render('restaurants/edit', {restaurant: foundRestaurant});
     });
 });
 
 // UPDATE ROUTE - finds and updates the restaurant and redirects to show page
-router.put('/:id', checkRestOwnership, function(req, res){
+router.put('/:id', middleware.checkRestOwnership, function(req, res){
     Restaurant.findByIdAndUpdate(req.params.id, req.body.restaurant, function(err, updatedRestaurant){
         if(err){
             res.redirect('/');
@@ -77,7 +78,7 @@ router.put('/:id', checkRestOwnership, function(req, res){
 });
 
 // DESTROY ROUTE - deletes a restaurant and redirects to the show page
-router.delete('/:id', checkRestOwnership, function(req, res){
+router.delete('/:id', middleware.checkRestOwnership, function(req, res){
     Restaurant.findByIdAndRemove(req.params.id, function(err){
         if(err){
             res.redirect('/restaurants');
@@ -86,34 +87,6 @@ router.delete('/:id', checkRestOwnership, function(req, res){
         }   
     });
 });
-
-// middleware for authentication (logged in or not?)
-function isLoggedIn(req, res, next){ 
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/login');
-}
-
-// middleware for authorization (permittion for the logged in user to do things)
-function checkRestOwnership(req, res, next) {
-    if(req.isAuthenticated()){
-        Restaurant.findById(req.params.id, function(err, foundRestaurant){
-            if(err){
-                res.redirect('back');
-            } else {
-                // does user own the restaurant?
-                if(foundRestaurant.author.id.equals(req.user._id)){
-                    next();
-                } else {
-                    res.redirect('back');
-                }
-            }
-        });
-    } else {
-        res.redirect('back');
-    }
-};
 
 
 module.exports = router;
