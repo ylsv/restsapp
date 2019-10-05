@@ -34,7 +34,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(function(req, res, next){ // middleware to add currentUser variable to routes to display navbar differently depending on the user being logged in or not
+app.use(function(req, res, next){ // middleware to add currentUser variable to routes to display templates differently depending on the logged in user
     res.locals.currentUser = req.user;
     next();
 });

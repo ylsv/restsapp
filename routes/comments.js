@@ -3,7 +3,7 @@
 // ===========================
 
 const express = require('express');
-const router = express.Router({mergeParams: true}); // add router variable to add routes to it instead or app variable
+const router = express.Router({mergeParams: true}); // add router variable to add routes to it instead of app variable
 const Restaurant = require('../models/restaurant');
 const Comment = require('../models/comment');
 
@@ -47,11 +47,67 @@ router.post('/', isLoggedIn, function(req, res){
     });
 });
 
-function isLoggedIn(req, res, next){ // middleware we create to check if the user is logged in (to be added to the routes);
+// Comment edit
+router.get('/:comment_id/edit', checkCommentOwnership, function(req, res){
+    Comment.findById(req.params.comment_id, function(err, foundComment){
+        if(err){
+            res.redirect('back');
+        } else {
+            res.render('comments/edit', {restaurant_id: req.params.id, comment: foundComment});
+        }
+    }); 
+});
+
+// Comment update
+router.put('/:comment_id', checkCommentOwnership, function(req, res){
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
+        if (err){
+            res.redirect('back');
+        } else {
+            res.redirect(`/restaurants/${req.params.id}`);
+        }
+    })
+});
+
+// Comment destroy
+router.delete('/:comment_id', checkCommentOwnership, function(req, res){
+    Comment.findByIdAndRemove(req.params.comment_id, function(err){
+        if (err){
+            res.redirect('back');
+        } else {
+            res.redirect(`/restaurants/${req.params.id}`);
+        }
+    });
+});
+
+
+
+// middleware we create to check if the user is logged in (to be added to the routes);
+function isLoggedIn(req, res, next){ 
     if(req.isAuthenticated()){
         return next();
     }
     res.redirect('/login');
 }
+
+// middleware for authorization (permission to edit or delete comments)
+function checkCommentOwnership(req, res, next) {
+    if(req.isAuthenticated()){
+        Comment.findById(req.params.comment_id, function(err, foundComment){
+            if(err){
+                res.redirect('back');
+            } else {
+                // does user own the comment?
+                if(foundComment.author.id.equals(req.user._id)){
+                    next();
+                } else {
+                    res.redirect('back');
+                }
+            }
+        });
+    } else {
+        res.redirect('back');
+    }
+};
 
 module.exports = router;

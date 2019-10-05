@@ -18,9 +18,9 @@
                     <h4><a href="#"><%= restaurant.name %></a></h1>
                     <p><%= restaurant.description %></p>
                     <p><em>Ресторан добавлен пользователем "<%= restaurant.author.username %>"</em></p>
-                     <% if (currentUser && restaurant.author.id.equals(currentUser._id)){ %> <!--shows button only if the correct user is logged in -->
-                        <a class="btn btn-sm btn-warning" href="/restaurants/<%= restaurant._id %>/edit">Редактировать</a>
-                        <form id="delete-form" action="/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST">
+                     <% if (currentUser && restaurant.author.id.equals(currentUser._id)){ %> <!--shows buttons only if the correct user is logged in -->
+                        <a class="btn btn-sm btn-warning" href="/restaurants/<%= restaurant._id %>/edit">Изменить</a>
+                        <form class="delete-form" action="/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST">
                             <button class="btn btn-sm btn-danger">Удалить</button>
                         </form>
                     <% } %>
@@ -39,6 +39,12 @@
                             <p>
                                 <%= comment.text %>
                             </p>
+                            <% if (currentUser && comment.author.id.equals(currentUser._id)){ %> <!--shows buttons only if the correct user is logged in -->
+                                <a class="btn btn-xs btn-warning" href="/restaurants/<%= restaurant._id %>/comments/<%= comment._id %>/edit">Изменить</a>
+                                <form class="delete-form" action="/restaurants/<%= restaurant._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                                    <input type="submit" class="btn btn-xs btn-danger" value="Удалить">
+                                </form>
+                            <% } %>
                         </div>
                     </div>
                 <% }); %>
