@@ -23,13 +23,14 @@ router.get('/', function(req, res){
 router.post('/', middleware.isLoggedIn, function(req, res){
     //get data from form and add to campgrounds array
     const name = req.body.name;
+    const price = req.body.price;
     const image = req.body.image;
     const desc = req.body.description;
     const author = {
         id: req.user._id,
         username: req.user.username
     };
-    const newRestaurant = {name: name, image: image, description: desc, author: author};
+    const newRestaurant = {name: name, price: price, image: image, description: desc, author: author};
     // Create a new rest and save it to DB
     Restaurant.create(newRestaurant, function(err, newlyCreated){
         if(err){

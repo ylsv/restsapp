@@ -9,10 +9,13 @@
                     <input class='form-control' type="text" name="restaurant[name]" value="<%= restaurant.name %>">
                 </div>
                 <div class="form-group">
+                    <input class='form-control' type="number" name="restaurant[price]" value="<%= restaurant.price %>" min="500" step="50">
+                </div>
+                <div class="form-group">
                     <input class='form-control' type="text" name="restaurant[image]" value="<%= restaurant.image %>">
                 </div>
                 <div class="form-group">
-                    <input class='form-control' type="text" name="restaurant[description]" value="<%= restaurant.description %>">
+                    <textarea rows="7" class='form-control' type="text" name="restaurant[description]"><%= restaurant.description %></textarea>
                 </div>
                 <div class="form-group">
                     <button class='btn btn-lg btn-primary btn-block'>Редактировать!</button>

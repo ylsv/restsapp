@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 // creating schema:
 const restSchema = new mongoose.Schema({
     name: String,
+    price: String,
     image: String,
     description: String,
     author: {
