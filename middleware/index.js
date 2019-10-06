@@ -8,7 +8,7 @@ const middlewareObj = {};
 middlewareObj.checkRestOwnership = function(req, res, next) {
     if(req.isAuthenticated()){
         Restaurant.findById(req.params.id, function(err, foundRestaurant){
-            if(err){
+            if(err || !foundRestaurant){
                 req.flash('error', 'Ресторан не найден');
                 res.redirect('back');
             } else {
@@ -30,7 +30,8 @@ middlewareObj.checkRestOwnership = function(req, res, next) {
 middlewareObj.checkCommentOwnership = function(req, res, next) {
     if(req.isAuthenticated()){
         Comment.findById(req.params.comment_id, function(err, foundComment){
-            if(err){
+            if(err || !foundComment){
+                req.flash('error', 'Комментарий не найден!');
                 res.redirect('back');
             } else {
                 // does user own the comment?

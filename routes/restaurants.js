@@ -51,8 +51,9 @@ router.get('/new', middleware.isLoggedIn, function(req, res){
 router.get('/:id', function(req, res){
     // find the restaurand with provided ID using mongoose .findById() method
     Restaurant.findById(req.params.id).populate('comments').exec(function(err, foundRestaurant){
-        if (err){
-            console.log(err);
+        if (err || !foundRestaurant){
+            req.flash('error', 'Ресторан не найден!');
+            res.redirect('back');
         } else {
             // render show template with that found restaurant
             res.render('restaurants/show', {restaurant: foundRestaurant});
