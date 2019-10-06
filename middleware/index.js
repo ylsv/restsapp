@@ -9,17 +9,20 @@ middlewareObj.checkRestOwnership = function(req, res, next) {
     if(req.isAuthenticated()){
         Restaurant.findById(req.params.id, function(err, foundRestaurant){
             if(err){
+                req.flash('error', 'Ресторан не найден');
                 res.redirect('back');
             } else {
                 // does user own the restaurant?
                 if(foundRestaurant.author.id.equals(req.user._id)){
                     next();
                 } else {
+                    req.flash('error', 'Только автор ресторана может вносить изменения');
                     res.redirect('back');
                 }
             }
         });
     } else {
+        req.flash('error', 'Пожалуйста, войдите или зарегистрируйтесь');
         res.redirect('back');
     }
 };
@@ -34,11 +37,13 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
                 if(foundComment.author.id.equals(req.user._id)){
                     next();
                 } else {
+                    req.flash('error', 'Только автор комментария может вносить изменения');
                     res.redirect('back');
                 }
             }
         });
     } else {
+        req.flash('error', 'Пожалуйста, войдите или зарегистрируйтесь');
         res.redirect('back');
     }
 };

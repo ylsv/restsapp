@@ -7,6 +7,7 @@ const router = express.Router(); // add router variable to add routes to it inst
 const passport = require('passport');
 const User = require('../models/user');
 
+
 // Root route
 router.get('/', function(req, res){
     res.render('landing');
@@ -25,10 +26,11 @@ router.post('/register', function(req, res){
     const newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, function(err, user){ // method that creates a new user with its password from the form data
         if(err){
-            console.log(err);
-            return res.render('register');
+            req.flash('error', 'Пользователь с таким именем уже существует');
+            return res.redirect("/register");
         }
         passport.authenticate('local')(req, res, function(){
+            req.flash('success', `Добро пожаловать, ${user.username}`);
             res.redirect('/restaurants');
         });
     });
@@ -52,11 +54,5 @@ router.get('/logout', function(req, res){
     res.redirect('/restaurants');
 });
 
-function isLoggedIn(req, res, next){ // middleware we create to check if the user is logged in (to be added to the routes);
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/login');
-}
 
 module.exports = router;

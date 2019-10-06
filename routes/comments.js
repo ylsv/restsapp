@@ -30,6 +30,7 @@ router.post('/', middleware.isLoggedIn, function(req, res){
             // create new comment
             Comment.create(req.body.comment, function(err, comment){
                 if(err){
+                    req.flash('error', 'Что-то пошло не так');
                     console.log(err);
                 } else {
                     // add username and id to comment
@@ -40,6 +41,7 @@ router.post('/', middleware.isLoggedIn, function(req, res){
                     // connect new comment to restaurant
                     restaurant.comments.push(comment);
                     restaurant.save();
+                    req.flash('success', 'Вы добавили новый комментарий!');
                     // redirect to restaurant show page
                     res.redirect(`/restaurants/${restaurant._id}`);
                 }
@@ -76,6 +78,7 @@ router.delete('/:comment_id', middleware.checkCommentOwnership, function(req, re
         if (err){
             res.redirect('back');
         } else {
+            req.flash('success', 'Комментарий удален!');
             res.redirect(`/restaurants/${req.params.id}`);
         }
     });

@@ -35,6 +35,7 @@ router.post('/', middleware.isLoggedIn, function(req, res){
         if(err){
             console.log(err);
         } else {
+            req.flash('success', 'Вы добавили новый ресторан!');
             //redirect back to rests index page
             res.redirect('/restaurants');
         }
@@ -83,6 +84,7 @@ router.delete('/:id', middleware.checkRestOwnership, function(req, res){
         if(err){
             res.redirect('/restaurants');
         } else {
+            req.flash('success', 'Ресторан удален :(');
             res.redirect('/restaurants');
         }   
     });
