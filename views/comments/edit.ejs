@@ -1,20 +1,19 @@
 <% include ../partials/header %>
 
-<div class="container">
-    <div class="row">
-        <h1 style="text-align: center">Отредактировать комментарий</h1>
-        <div style="width: 30%; margin: 25px auto">
-            <form action="/restaurants/<%= restaurant_id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
-                <div class="form-group">
-                    <input class='form-control' type="text" name="comment[text]" value="<%= comment.text %>">
-                </div>
-                <div class="form-group">
-                    <button class='btn btn-lg btn-primary btn-block'>Изменить!</button>
-                </div>
-            </form>
-            <a href="/restaurants">Назад</a>
-        </div>
+<div class="row">
+    <h1 style="text-align: center">Отредактировать комментарий</h1>
+    <div style="width: 30%; margin: 25px auto">
+        <form action="/restaurants/<%= restaurant_id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+                <input class='form-control' type="text" name="comment[text]" value="<%= comment.text %>">
+            </div>
+            <div class="form-group">
+                <button class='btn btn-lg btn-primary btn-block'>Изменить!</button>
+            </div>
+        </form>
+        <a href="/restaurants">Назад</a>
     </div>
 </div>
+
 
 <% include ../partials/footer %>

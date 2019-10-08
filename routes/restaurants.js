@@ -14,7 +14,7 @@ router.get('/', function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render('restaurants/index', {restaurants: allRests});
+            res.render('restaurants/index', {restaurants: allRests, page: 'restaurants'});
         }
     });
 });

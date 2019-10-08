@@ -1,56 +1,55 @@
 <% include ../partials/header %>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <p class="lead">Лучшие рестораны</p>
-            <div class="list-group">
-                <li class="list-group-item active">Инфо 1</li>
-                <li class="list-group-item">Инфо 2</li>
-                <li class="list-group-item">Инфо 3</li>
+<div class="row">
+    <div class="col-md-3">
+        <p class="lead">Лучшие рестораны</p>
+        <div class="list-group">
+            <li class="list-group-item active">Инфо 1</li>
+            <li class="list-group-item">Инфо 2</li>
+            <li class="list-group-item">Инфо 3</li>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="thumbnail">
+            <img class='img-responsive' src="<%= restaurant.image %>"> 
+            <div class="caption-full">
+                <h4 class="pull-right"><%= restaurant.price %> руб/чел</h4>
+                <h4><a href="#"><%= restaurant.name %></a></h1>
+                <p><%= restaurant.description %></p>
+                <p><em>Ресторан добавлен пользователем "<%= restaurant.author.username %>"</em></p>
+                    <% if (currentUser && restaurant.author.id.equals(currentUser._id)){ %> <!--shows buttons only if the correct user is logged in -->
+                    <a class="btn btn-sm btn-warning" href="/restaurants/<%= restaurant._id %>/edit">Изменить</a>
+                    <form class="delete-form" action="/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-sm btn-danger">Удалить</button>
+                    </form>
+                <% } %>
             </div>
         </div>
-        <div class="col-md-9">
-            <div class="thumbnail">
-                <img class='img-responsive' src="<%= restaurant.image %>"> 
-                <div class="caption-full">
-                    <h4 class="pull-right"><%= restaurant.price %> руб/чел</h4>
-                    <h4><a href="#"><%= restaurant.name %></a></h1>
-                    <p><%= restaurant.description %></p>
-                    <p><em>Ресторан добавлен пользователем "<%= restaurant.author.username %>"</em></p>
-                     <% if (currentUser && restaurant.author.id.equals(currentUser._id)){ %> <!--shows buttons only if the correct user is logged in -->
-                        <a class="btn btn-sm btn-warning" href="/restaurants/<%= restaurant._id %>/edit">Изменить</a>
-                        <form class="delete-form" action="/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-sm btn-danger">Удалить</button>
-                        </form>
-                    <% } %>
-                </div>
+        <div class="well">
+            <div class="text-right">
+                <a class="btn btn-success" href="/restaurants/<%= restaurant.id %>/comments/new">Добавить новый комментарий</a>
             </div>
-            <div class="well">
-                <div class="text-right">
-                    <a class="btn btn-success" href="/restaurants/<%= restaurant.id %>/comments/new">Добавить новый комментарий</a>
-                </div>
-                <hr>
-                <% restaurant.comments.forEach(function(comment){ %>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <strong><%= comment.author.username %></strong>
-                            <span class="pull-right">10 дней назад</span>
-                            <p>
-                                <%= comment.text %>
-                            </p>
-                            <% if (currentUser && comment.author.id.equals(currentUser._id)){ %> <!--shows buttons only if the correct user is logged in -->
-                                <a class="btn btn-xs btn-warning" href="/restaurants/<%= restaurant._id %>/comments/<%= comment._id %>/edit">Изменить</a>
-                                <form class="delete-form" action="/restaurants/<%= restaurant._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
-                                    <input type="submit" class="btn btn-xs btn-danger" value="Удалить">
-                                </form>
-                            <% } %>
-                        </div>
+            <hr>
+            <% restaurant.comments.forEach(function(comment){ %>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong><%= comment.author.username %></strong>
+                        <span class="pull-right">10 дней назад</span>
+                        <p>
+                            <%= comment.text %>
+                        </p>
+                        <% if (currentUser && comment.author.id.equals(currentUser._id)){ %> <!--shows buttons only if the correct user is logged in -->
+                            <a class="btn btn-xs btn-warning" href="/restaurants/<%= restaurant._id %>/comments/<%= comment._id %>/edit">Изменить</a>
+                            <form class="delete-form" action="/restaurants/<%= restaurant._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                                <input type="submit" class="btn btn-xs btn-danger" value="Удалить">
+                            </form>
+                        <% } %>
                     </div>
-                <% }); %>
-            </div>
+                </div>
+            <% }); %>
         </div>
     </div>
 </div>
+
 
 <% include ../partials/footer %>

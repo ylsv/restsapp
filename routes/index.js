@@ -19,15 +19,15 @@ router.get('/', function(req, res){
 
 // show register form
 router.get('/register', function(req, res){
-    res.render('register');
+    res.render('register', {page: 'register'});
 });
 // handle sign up logic
 router.post('/register', function(req, res){
     const newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, function(err, user){ // method that creates a new user with its password from the form data
         if(err){
-            req.flash('error', 'Пользователь с таким именем уже существует');
-            return res.redirect("/register");
+            console.log(err);
+            return res.render("register", {error: "Пользователь с таким именем уже существует. Попробуйте выбрать другое имя"});
         }
         passport.authenticate('local')(req, res, function(){
             req.flash('success', `Добро пожаловать, ${user.username}`);
@@ -37,7 +37,7 @@ router.post('/register', function(req, res){
 });
 // show login form
 router.get('/login', function(req, res){
-    res.render('login');
+    res.render('login', {page: 'login'});
 });
 // handle login logic
 router.post('/login', passport.authenticate('local',

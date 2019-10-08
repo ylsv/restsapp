@@ -1,29 +1,28 @@
 <% include ../partials/header %>
 
-<div class="container">
-    <div class="row">
-        <h1 style="text-align: center">Добавить новый ресторан</h1>
-        <div style="width: 30%; margin: 25px auto">
-            <form action="/restaurants" method="POST" >
-                <div class="form-group">
-                    <input class='form-control' type="text" name="name" placeholder="название">
-                </div>
-                <div class="form-group">
-                    <input class='form-control' type="number" name="price" placeholder="средний чек (руб/чел)" min="500" step="50">
-                </div>
-                <div class="form-group">
-                    <input class='form-control' type="text" name="image" placeholder="ссылка на фото">
-                </div>
-                <div class="form-group">
-                    <textarea rows="7" class='form-control' name="description" placeholder="описание"></textarea>
-                </div>
-                <div class="form-group">
-                    <button class='btn btn-lg btn-primary btn-block'>Добавить!</button>
-                </div>
-            </form>
-            <a href="/restaurants">Назад</a>
-        </div>
+<div class="row">
+    <h1 style="text-align: center">Добавить новый ресторан</h1>
+    <div style="width: 30%; margin: 25px auto">
+        <form action="/restaurants" method="POST" >
+            <div class="form-group">
+                <input class='form-control' type="text" name="name" placeholder="название">
+            </div>
+            <div class="form-group">
+                <input class='form-control' type="number" name="price" placeholder="средний чек (руб/чел)" min="500" step="50">
+            </div>
+            <div class="form-group">
+                <input class='form-control' type="text" name="image" placeholder="ссылка на фото">
+            </div>
+            <div class="form-group">
+                <textarea rows="7" class='form-control' name="description" placeholder="описание"></textarea>
+            </div>
+            <div class="form-group">
+                <button class='btn btn-lg btn-primary btn-block'>Добавить!</button>
+            </div>
+        </form>
+        <a href="/restaurants">Назад</a>
     </div>
 </div>
+
 
 <% include ../partials/footer %>
