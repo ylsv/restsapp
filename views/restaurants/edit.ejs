@@ -5,16 +5,16 @@
     <div style="width: 30%; margin: 25px auto">
         <form action="/restaurants/<%= restaurant._id %>?_method=PUT" method="POST" >
             <div class="form-group">
-                <input class='form-control' type="text" name="restaurant[name]" value="<%= restaurant.name %>">
+                <input class='form-control' type="text" name="restaurant[name]" value="<%= restaurant.name %>" required>
             </div>
             <div class="form-group">
-                <input class='form-control' type="number" name="restaurant[price]" value="<%= restaurant.price %>" min="500" step="50">
+                <input class='form-control' type="number" name="restaurant[price]" value="<%= restaurant.price %>" min="500" max="10000" step="50">
             </div>
             <div class="form-group">
-                <input class='form-control' type="text" name="restaurant[image]" value="<%= restaurant.image %>">
+                <input class='form-control' type="text" name="restaurant[image]" value="<%= restaurant.image %>" required>
             </div>
             <div class="form-group">
-                <textarea rows="7" class='form-control' type="text" name="restaurant[description]"><%= restaurant.description %></textarea>
+                <textarea rows="7" class='form-control' type="text" name="restaurant[description]" required><%= restaurant.description %></textarea>
             </div>
             <div class="form-group">
                 <button class='btn btn-lg btn-primary btn-block'>Редактировать!</button>

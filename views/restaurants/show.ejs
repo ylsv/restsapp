@@ -16,7 +16,7 @@
                 <h4 class="pull-right"><%= restaurant.price %> руб/чел</h4>
                 <h4><a href="#"><%= restaurant.name %></a></h1>
                 <p><%= restaurant.description %></p>
-                <p><em>Ресторан добавлен пользователем "<%= restaurant.author.username %>"</em></p>
+                <p><em>Ресторан добавлен пользователем "<%= restaurant.author.username %>", <%= moment(restaurant.createdAt).fromNow() %></em></p>
                     <% if (currentUser && restaurant.author.id.equals(currentUser._id)){ %> <!--shows buttons only if the correct user is logged in -->
                     <a class="btn btn-sm btn-warning" href="/restaurants/<%= restaurant._id %>/edit">Изменить</a>
                     <form class="delete-form" action="/restaurants/<%= restaurant._id %>?_method=DELETE" method="POST">
@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <strong><%= comment.author.username %></strong>
-                        <span class="pull-right">10 дней назад</span>
+                        <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
                         <p>
                             <%= comment.text %>
                         </p>

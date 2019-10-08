@@ -24,6 +24,8 @@ app.use(methodOverride('_method')); // tells the app to use methodOverride we re
 app.use(flash()); // tell express to use flash messages
 // seedDB(); // seeding the DB of sample restaurants and comments
 
+app.locals.moment = require('moment') // requires moment JS library to show how long ago an item was created
+
 // PASSPORT CONFIGURATION
 app.use(require('express-session')({
     secret: 'The quick brown fox jumps over the lazy dog',
