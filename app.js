@@ -6,6 +6,7 @@ const   express    = require('express'),
         passport   = require('passport'), // add passport js for authentication
         LocalStrategy = require('passport-local'), // authentication by means of email and password
         methodOverride = require('method-override'), // used to override post methods into PUT etc
+        moment     = require('moment'), // requires moment JS library to show how long ago an item was created
         Restaurant = require('./models/restaurant'), // add link to our restaurant file with restaurant schema and model
         Comment    = require('./models/comment'), // add link to comment model
         User       = require('./models/user'), // add user model
@@ -22,9 +23,10 @@ app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
 app.use(express.static(__dirname + '/public')); // tells the app to search for linked files (css/js) in the public directory. __dirname - is the name of root directory (add it for safety purposes).
 app.use(methodOverride('_method')); // tells the app to use methodOverride we required
 app.use(flash()); // tell express to use flash messages
+moment.locale('ru'); // sets momentJS language to Russian
+app.locals.moment = moment; // transferrs momentJS to all templates
 // seedDB(); // seeding the DB of sample restaurants and comments
 
-app.locals.moment = require('moment') // requires moment JS library to show how long ago an item was created
 
 // PASSPORT CONFIGURATION
 app.use(require('express-session')({
