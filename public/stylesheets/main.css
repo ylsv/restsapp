@@ -13,3 +13,12 @@
 .delete-form {
     display: inline;
 }
+
+#restname {
+    font-weight: 700;
+    color: rgb(77, 76, 76);
+}
+
+#avprice {
+    color: rgb(63, 143, 218);
+}
