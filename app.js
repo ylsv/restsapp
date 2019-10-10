@@ -17,7 +17,8 @@ const   commentRoutes = require('./routes/comments'),
         restRoutes    = require('./routes/restaurants'),
         indexRoutes   = require('./routes/index');
 
-mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true, useFindAndModify: false}); // connects mongoose to MongoDB
+// mongoose.connect('mongodb://localhost:27017/rests_app', {useNewUrlParser: true, useFindAndModify: false}); // connects mongoose to local MongoDB
+mongoose.connect('mongodb+srv://ylsv:dickpick@cluster0-7oi2r.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false}); // connects mongoose to Atlas MongoDB
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
 app.use(express.static(__dirname + '/public')); // tells the app to search for linked files (css/js) in the public directory. __dirname - is the name of root directory (add it for safety purposes).
@@ -55,7 +56,7 @@ app.use('/restaurants/:id/comments', commentRoutes);
 
 
 // For local app:
-// app.listen(3000, () => console.log('Rests App Has Started!'));
+//app.listen(3000, () => console.log('Rests App Has Started!'));
 
 // For Heroku deployment:
 app.listen(process.env.PORT);
