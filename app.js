@@ -18,7 +18,6 @@ const   commentRoutes = require('./routes/comments'),
         indexRoutes   = require('./routes/index');
 
 mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false}); // connects mongoose to local MongoDB
-// mongoose.connect('mongodb+srv://ylsv:dickpick@cluster0-7oi2r.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false}); // connects mongoose to Atlas MongoDB
 app.use(bodyParser.urlencoded({extended: true})); // command to use body-parser
 app.set('view engine', 'ejs'); // lets us avoid .ejs endings in files
 app.use(express.static(__dirname + '/public')); // tells the app to search for linked files (css/js) in the public directory. __dirname - is the name of root directory (add it for safety purposes).
