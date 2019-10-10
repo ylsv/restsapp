@@ -54,4 +54,8 @@ app.use('/restaurants', restRoutes);
 app.use('/restaurants/:id/comments', commentRoutes);
 
 
-app.listen(3000, () => console.log('Rests App Has Started!'));
+// For local app:
+// app.listen(3000, () => console.log('Rests App Has Started!'));
+
+// For Heroku deployment:
+app.listen(process.env.PORT);
